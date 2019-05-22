@@ -26,14 +26,12 @@ Jinja2
 jmespath
 jsonschema
 MarkupSafe
-mysqlclient
 paramiko
 psycopg2
 psycopg2-binary
 pyasn1
 pycparser
 PyJWT
-PyMySQL
 PyNaCl
 pyrsistent
 PySocks
