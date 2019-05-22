@@ -27,7 +27,6 @@ jmespath
 jsonschema
 MarkupSafe
 paramiko
-psycopg2
 psycopg2-binary
 pyasn1
 pycparser
