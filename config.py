@@ -8,7 +8,7 @@ DATABASE_URI = 'postgresql+psycopg2://scott:tigger@192.168.172.131:5432/tracker'
 DATABASE_TRACK_MODIFICATIONS = True
 
 SSH_RULES = {
-        "ssh_key_folder": "/Users/smaniottoc/.ssh/taxi",
+        "ssh_key_folder": "/opt/cta/files_pem_keys/taxi",
         "ssh_connection_method": "hostname",  # other option would be "ip"
         "ssh_timeout_seconds": 5,
         "ssh_banner_timeout_seconds": 30,
@@ -54,19 +54,28 @@ SSH_RULES = {
         }
 }
 
+
+# IT's a mirror of .aws/credential file OR use your custom aws_access_key_id, etc..
 AWS_CREDENTIAL_CONFIG = [
     {
-        "credential":"dev/qa", # If nothing will be use the default aws credential or aws_access_key_id
+        "credential": "default",  # If nothing will be use the default aws credential or aws_access_key_id
         "enable": True,
         "aws_access_key_id": None,
         "aws_secret_access_key": None,
         "profile": "qadev"
     },
-    {
-        "credential": "prod",
-        "enable": False,
-        "aws_access_key_id": None,
-        "aws_secret_access_key": None,
-        "profile": "prod"
-    },
+#    {
+#        "credential":"dev/qa", # If nothing will be use the default aws credential or aws_access_key_id
+#        "enable": True,
+#        "aws_access_key_id": None,
+#        "aws_secret_access_key": None,
+#        "profile": "qadev"
+#    },
+#    {
+#        "credential": "prod",
+#        "enable": False,
+#        "aws_access_key_id": None,
+#        "aws_secret_access_key": None,
+#        "profile": "prod"
+#    },
 ]
