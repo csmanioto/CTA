@@ -9,7 +9,7 @@ FROM
             instance_state_date::date as instance_state_date
      from aws_instances
       where instance_state = 'running'
-      and workload_profile = 'QADEV'
+      and workload_tag = 'QADEV'
       group by instance_state_date::date
      ) as irn
 LEFT JOIN
@@ -17,7 +17,7 @@ LEFT JOIN
              instance_state_date::date as instance_state_date
      from aws_instances
      where instance_state = 'stopped'
-     and workload_profile = 'QADEV'
+     and workload_tag = 'QADEV'
      group by instance_state_date::date
     ) as istp
 ON irn.instance_state_date = istp.instance_state_date
@@ -27,7 +27,7 @@ LEFT OUTER JOIN
             instance_state_date::date as instance_state_date
      from aws_instances
        where instance_state = 'terminated'
-       and workload_profile = 'QADEV'
+       and workload_tag = 'QADEV'
        group by instance_state_date::date
     ) as itm
 ON irn.instance_state_date = itm.instance_state_date
@@ -36,10 +36,9 @@ LEFT OUTER JOIN
         (select COALESCE(count(instance_id), 0) as total_instances,
             instance_state_date::date as instance_state_date
      from aws_instances
-        where workload_profile = 'QADEV'
+        where workload_tag = 'QADEV'
         and instance_state <> 'terminated'
        group by instance_state_date::date
     ) as itt
 ON irn.instance_state_date = itt.instance_state_date
 order by scan_date desc
-

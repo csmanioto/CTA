@@ -13,9 +13,9 @@ class WriteData(object):
 
     base_datetime = datetime.now().date()
 
-    def __init__(self, conn, workload_profile):
+    def __init__(self, conn, workload_tag):
         self.conn = conn
-        self.workload_profile = workload_profile
+        self.workload_tag = workload_tag
 
     # --- INSTANCE ---#
     def save_instance(self, dict_instance_details, workload_profile):
@@ -43,6 +43,7 @@ class WriteData(object):
                 new_instance = AWSInstance(
                     instance_state_date= datetime.today(),
                     instance_id=instance_id,
+                    instance_model=dict_instance_details['instance_model'],
                     aws_region_name=dict_instance_details['aws_region_name'],
                     aws_region_coordinate_lat = lat,
                     aws_region_coordinate_log = log,
@@ -69,7 +70,7 @@ class WriteData(object):
                     instance_launch_time=dict_instance_details['deep_details']['instance_launch_time'],
                     instance_tags=dict_instance_details['deep_details']['tags_string'],
                     instance_tags_json=dict_instance_details['deep_details']['tags_json'],
-                    workload_profile = self.workload_profile
+                    workload_tag= self.workload_tag
                 )
                 self.conn.session.add(new_instance)
                 saved = True
@@ -191,7 +192,7 @@ class WriteData(object):
         pass
 
     # ---- INSTANCE-PRICE ---#
-    def save_instance_price(self,  dict_instance_details, workload_profile):
+    def save_instance_price(self,  dict_instance_details, workload_tag):
         saved = False
         try:
             instance_id = dict_instance_details['instance_id']
@@ -224,7 +225,7 @@ class WriteData(object):
                     instance_hrs_price_usd=instance_hrs_price_usd,
                     instance_mth_price_usd=instance_mth_price_usd,
                     instance_last_state=dict_instance_details['deep_details']['InstanceState'],
-                    workload_profile = self.workload_profile
+                    workload_tag= self.workload_tag
 
                 )
                 self.conn.session.add(new_inst_price)
@@ -305,8 +306,8 @@ class WriteData(object):
                 total_cost_ec2_reserved_month = simple_query_count(self.conn, AWSInstance, {'instance_low_utilization_suspected': True})
                 total_cost_ec2_spot_month  = simple_query_count(self.conn, AWSInstance, {'instance_low_utilization_suspected': True})
 
-                oportunity_save_money_reservation = simple_sum(self.conn, AWSInstance, {'instance_running_price': "OnDemand"})
-                oportunity_save_money_spot_asg = simple_sum(self.conn, AWSInstance, {'instance_low_utilization_suspected': True})
+                opportunity_save_money_reservation = simple_sum(self.conn, AWSInstance, {'instance_running_price': "OnDemand"})
+                opportunity_save_money_spot_asg = simple_sum(self.conn, AWSInstance, {'instance_low_utilization_suspected': True})
 
                 new_summary = AWSSummary(
                     summary_date = self.base_datetime,
@@ -320,10 +321,10 @@ class WriteData(object):
                     total_cost_ec2_reserved_month = total_cost_ec2_reserved_month,
                     total_cost_ec2_spot_month = total_cost_ec2_spot_month,
 
-                    oportunity_save_money_reservation = oportunity_save_money_reservation,
-                    oportunity_save_money_spot_asg = oportunity_save_money_spot_asg,
+                    opportunity_save_money_reservation = opportunity_save_money_reservation,
+                    opportunity_save_money_spot_asg = opportunity_save_money_spot_asg,
 
-                    summary_profile = self.workload_profile
+                    summary_tag = self.workload_tag
 
                 )
                 self.conn.session.add(new_summary)
@@ -339,9 +340,9 @@ class WriteData(object):
         try:
             logger.info("Saving data into Database")
 
-            self.save_instance(dict_instance_details,self.workload_profile)
+            self.save_instance(dict_instance_details, self.workload_tag)
             self.save_price(dict_instance_details)
-            self.save_instance_price(dict_instance_details, self.workload_profile)
+            self.save_instance_price(dict_instance_details, self.workload_tag)
             self.save_instance_workload(dict_instance_details)
             #self.save_summary_workload(dict_instance_details,  ,self.workload_profile)
 

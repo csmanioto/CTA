@@ -8,11 +8,9 @@ from app import db
 class AWSInstance(db.Model):
     __tablename__ = 'aws_instances'
 
-    instance_id = db.Column(db.String(30),
-                            primary_key=True)
-    aws_region = db.Column(db.String(30),
-                                primary_key=True,
-                                nullable=False)
+    instance_id = db.Column(db.String(30), primary_key=True)
+    instance_model = db.Column(db.String(30), index=True, nullable=False)
+    aws_region = db.Column(db.String(30), primary_key=True, nullable=False)
     aws_region_name = db.Column(db.String(60), nullable=False)
     aws_region_coordinate_lat = db.Column(db.String(255), nullable=True)
     aws_region_coordinate_log = db.Column(db.String(255), nullable=True)
@@ -48,18 +46,19 @@ class AWSInstance(db.Model):
     instance_launch_time = db.Column(db.DateTime)
     instance_tags = db.Column(db.String(9999))
     instance_tags_json = db.Column(db.JSON)
-    workload_profile = db.Column(db.String(255), index=True, nullable=False) # Profile would be: test, qa, prod.
+    workload_tag = db.Column(db.String(255), index=True, nullable=False) # Profile would be: test, qa, prod.
 
-    def __init__(self, instance_id, aws_region, aws_region_name,
+    def __init__(self, instance_id, instance_model, aws_region, aws_region_name,
                  instance_low_utilization_suspected, instance_ami_id, instance_state,
                  instance_linux_kernel_version, instance_linux_distribution, instance_ssh_pem_key
                  , instance_auto_scaling_group, instance_auto_scaling_group_name, instance_type, instance_ebs_optimized
                  , instance_vpc_id, instance_vpc_subnet_id, instance_vpc_ip, instance_vpc_availability_zone
                  , instance_aws_account_id, instance_reservation_id, instance_spot_id, instance_launch_time,
-                 instance_tags, instance_tags_json, instance_state_date, workload_profile,
+                 instance_tags, instance_tags_json, instance_state_date, workload_tag,
                  aws_region_coordinate_lat=None, aws_region_coordinate_log=None, aws_region_coordinate_geojson=None,
                  instance_previous_state=None, instance_running_price=None):
         self.instance_id = instance_id
+        self.instance_model = instance_model
         self.aws_region = aws_region
         self.aws_region_name = aws_region_name
         self.aws_region_coordinate_lat = aws_region_coordinate_lat
@@ -88,7 +87,7 @@ class AWSInstance(db.Model):
         self.instance_state_date = instance_state_date
         self.instance_previous_state = instance_previous_state
         self.instance_running_price = instance_running_price
-        self.workload_profile = workload_profile.upper()
+        self.workload_tag = workload_tag.upper()
 
     def __repr__(self):
         return "<AWSInstance '{}'>".format(self.instance_id)
@@ -124,7 +123,6 @@ class AWSPrices(db.Model):
         self.aws_region = aws_region
         self.price_date = price_date
 
-
         self.price_ondemand_price_hrs_usd = price_ondemand_price_hrs_usd
         self.price_ondemand_price_mth_usd = price_ondemand_price_mth_usd
 
@@ -156,10 +154,10 @@ class AWSInstancePrice(db.Model):
     instance_hrs_price_usd = db.Column(db.Float)
     instance_mth_price_usd = db.Column(db.Float)
     instance_last_state = db.Column(db.String(30))
-    workload_profile = db.Column(db.String(255), index=True, nullable=False) # Profile would be: test, qa, prod.
+    workload_tag = db.Column(db.String(255), index=True, nullable=False) # Profile would be: test, qa, prod.
 
 
-    def __init__(self, instance_id, aws_region, instance_type, instance_price_date, instance_running_price, instance_hrs_price_usd, instance_mth_price_usd, instance_last_state, workload_profile ):
+    def __init__(self, instance_id, aws_region, instance_type, instance_price_date, instance_running_price, instance_hrs_price_usd, instance_mth_price_usd, instance_last_state, workload_tag):
         self.instance_id = instance_id
         self.aws_region = aws_region
         self.instance_type = instance_type
@@ -168,7 +166,7 @@ class AWSInstancePrice(db.Model):
         self.instance_hrs_price_usd = instance_hrs_price_usd
         self.instance_mth_price_usd = instance_mth_price_usd
         self.instance_last_state = instance_last_state
-        self.workload_profile = workload_profile.upper()
+        self.workload_tag = workload_tag.upper()
 
     def __repr__(self):
         return '<AWSInstancePrice {} {} {}>'.format(self.instance_id, self.instance_type, self.aws_region)
@@ -238,9 +236,9 @@ class AWSSummary(db.Model):
     total_cost_ec2_spot_month = db.Column(db.Float)
 
     oportunity_save_money_reservation = db.Column(db.Float)
-    oportunity_save_money_spot_asg = db.Column(db.Float)
+    opportunity_save_money_spot_asg = db.Column(db.Float)
 
-    summary_profile = db.Column(db.String(255)) # Profile would be: test, qa, prod, qadev, anything util
+    summary_tag = db.Column(db.String(255)) # Profile would be: test, qa, prod, qadev, anything util
 
 
 
@@ -248,7 +246,7 @@ class AWSSummary(db.Model):
                  total_ec2_ondemand,
                  total_ec2_reserved, percentage_rsv_x_ond, total_ec2_spot, total_instances_flagged_lowuse,
                  total_cost_ec2_ondemand_month, total_cost_ec2_reserved_month,total_cost_ec2_spot_month,
-                 oportunity_save_money_reservation, oportunity_save_money_spot_asg, summary_profile):
+                 oportunity_save_money_reservation, oportunity_save_money_spot_asg, summary_tag):
 
         self.summary_date = summary_date
         self.total_ec2_ondemand =  total_ec2_ondemand
@@ -259,9 +257,9 @@ class AWSSummary(db.Model):
         self.total_cost_ec2_ondemand_month = total_cost_ec2_ondemand_month
         self.total_cost_ec2_reserved_month = total_cost_ec2_reserved_month
         self.total_cost_ec2_spot_month =  total_cost_ec2_spot_month
-        self.oportunity_save_money_reservation = oportunity_save_money_reservation
-        self.oportunity_save_money_spot_asg = oportunity_save_money_spot_asg
-        self.summary_profile = summary_profile.upper()
+        self.opportunity_save_money_reservation = oportunity_save_money_reservation
+        self.opportunity_save_money_spot_asg = oportunity_save_money_spot_asg
+        self.summary_tag = summary_tag.upper()
 
     def __repr__(self):
         return '<AWSSummary {} {}>'.format(self.summary_id, self.summary_date)

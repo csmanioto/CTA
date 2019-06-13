@@ -377,6 +377,7 @@ class EC2(AWSInterface):
         low_check = {'low_utilizaion_check': underused[1]}
         metadata = {
             "instance_id": instance_id,
+            "instance_model": "EC2",
             "aws_region": aws_region,
             "aws_region_name":  self.aws_regions_id_to_name(aws_region),
             "aws_region_coordinate": self.aws_get_geo_region(aws_region),
@@ -391,9 +392,9 @@ class EC2(AWSInterface):
 
     def get_ec2_details(self, instance_id=None, aws_region=None, db_conn=None):
         from database.write import WriteData
-        workload_profile = self.settings_profile['profile']
+        workload_tag = self.settings_profile['profile']
 
-        db = WriteData(db_conn, workload_profile)
+        db = WriteData(db_conn, workload_tag)
 
         all_instances = []
 

@@ -8,7 +8,8 @@ DATABASE_URI = 'postgresql+psycopg2://scott:tigger@192.168.172.131:5432/tracker'
 DATABASE_TRACK_MODIFICATIONS = True
 
 SSH_RULES = {
-        "ssh_key_folder": "/opt/cta/files_pem_keys/taxi",
+        #"ssh_key_folder": "/opt/cta/files_pem_keys/taxi",
+        "ssh_key_folder": "/Users/smaniottoc/.ssh/taxi",
         "ssh_connection_method": "hostname",  # other option would be "ip"
         "ssh_timeout_seconds": 5,
         "ssh_banner_timeout_seconds": 30,
