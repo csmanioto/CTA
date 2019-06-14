@@ -225,7 +225,7 @@ class WriteData(object):
                     instance_hrs_price_usd=instance_hrs_price_usd,
                     instance_mth_price_usd=instance_mth_price_usd,
                     instance_last_state=dict_instance_details['deep_details']['InstanceState'],
-                    workload_tag= self.workload_tag
+                    workload_tag=self.workload_tag
 
                 )
                 self.conn.session.add(new_inst_price)

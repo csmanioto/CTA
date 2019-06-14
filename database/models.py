@@ -1,6 +1,7 @@
 # from database import db
 #from geoalchemy2 import Geometry
 #from sqlalchemy import Column
+from sqlalchemy.dialects.postgresql.json import JSONB
 
 from app import db
 
@@ -45,7 +46,7 @@ class AWSInstance(db.Model):
     instance_spot_id = db.Column(db.String(30))
     instance_launch_time = db.Column(db.DateTime)
     instance_tags = db.Column(db.String(9999))
-    instance_tags_json = db.Column(db.JSON)
+    instance_tags_json = db.Column(JSONB, index=True)
     workload_tag = db.Column(db.String(255), index=True, nullable=False) # Profile would be: test, qa, prod.
 
     def __init__(self, instance_id, instance_model, aws_region, aws_region_name,
