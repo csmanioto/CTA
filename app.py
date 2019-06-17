@@ -4,6 +4,8 @@ from flask import Flask, Blueprint
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from sqlalchemy_utils import database_exists, create_database, drop_database
+from sqlalchemy import text
+
 #from flask_login import LoginManager, current_user, login_user
 #import os
 
@@ -57,6 +59,18 @@ def resetdb_command():
     print('Creating tables.')
     db.create_all()
     db.session.commit()
+
+    print("Preparing report structures")
+
+    from pathlib import Path
+    pgsql_types = Path("report_setup/pgsql_types.sql").read_text()
+    pgsql_functions = Path("report_setup/pgsql_functions.sql").read_text()
+    db.session.execute(text(pgsql_types))
+    db.session.commit()
+    db.session.execute(text(pgsql_functions))
+    db.session.commit()
+
+
     print('Shiny!')
 
 

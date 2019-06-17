@@ -141,7 +141,13 @@ class EC2(AWSInterface):
             ownerid = rs['Reservations'][0]['OwnerId']
 
             try:
-                tags = rs['Reservations'][0]['Instances'][0]['Tags']
+                tags = None
+                try:
+                    tags = rs['Reservations'][0]['Instances'][0]['Tags']
+                except:
+                    logger.info("Have tags the instance_id {} ? ".format(rs['Reservations'][0]['Instances'][0]['InstanceId'] ))
+                    pass
+
                 instance_details = {}
                 tags_string = None
                 tag_list_json = []

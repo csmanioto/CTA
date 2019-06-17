@@ -3,7 +3,7 @@ API_TCP_PORT = 8080
 API_INTERFACE = "0.0.0.0"
 
 # DATABASE settings
-DATABASE_URI = 'postgresql+psycopg2://scott:tigger@192.168.172.131:5432/tracker'
+DATABASE_URI = 'postgresql+psycopg2://scott:tigger@192.168.172.134:5432/tracker'
 
 DATABASE_TRACK_MODIFICATIONS = True
 
