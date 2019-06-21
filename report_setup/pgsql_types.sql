@@ -14,13 +14,12 @@ CREATE TYPE type_aws_asg_instances_aws_prices AS (
 --
 
 CREATE TYPE type_aws_lat_long AS (
-    agr_instance_state bigint,
+    number_of_instances bigint,
     aws_region varchar,
     aws_region_name varchar,
     aws_region_coordinate_lat varchar,
     aws_region_coordinate_log varchar
     );
-
 --
 CREATE TYPE type_aws_ondemand_reservation AS (
     ondemand_month float,

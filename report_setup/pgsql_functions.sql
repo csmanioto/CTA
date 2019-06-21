@@ -141,7 +141,7 @@ BEGIN
                     RAISE NOTICE 'JSON QUERY  (%)', JSON_WHERE;
 
                     RETURN QUERY
-                    SELECT  count(instance_state),
+                    SELECT  count(instance_state) as number_instances,
                                 aws_region,
                                 aws_region_name,
                                 aws_region_coordinate_lat,
@@ -155,7 +155,7 @@ BEGIN
                                  aws_region_coordinate_log;
                 ELSE
                    RETURN QUERY
-                    SELECT  count(instance_state),
+                    SELECT  count(instance_state) as number_instances,
                                 aws_region,
                                 aws_region_name,
                                 aws_region_coordinate_lat,

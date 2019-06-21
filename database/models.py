@@ -93,6 +93,81 @@ class AWSInstance(db.Model):
     def __repr__(self):
         return "<AWSInstance '{}'>".format(self.instance_id)
 
+class AWSEBS(db.Model):
+    __tablename__ = 'aws_ebs'
+
+    ebs_volume_id = db.Column(db.String(30), primary_key=True)
+    ebs_aws_az = db.Column(db.String(30), primary_key=True)
+    instance_id = db.Column(db.String(30), index=True)
+    snapshot_id = db.Column(db.String(30), index=True)
+
+    ebs_size = db.Column(db.String(14), nullable=False)
+    ebs_volume_type = db.Column(db.String(14), nullable=False)
+    ebs_iops = db.Column(db.String(14), nullable=False)
+    ebs_alarm_status = db.Column(db.String(30))
+    ebs_status = db.Column(db.String(30))
+    ebs_volume_status_ok = db.Column(db.Boolean)
+    ebs_volume_encryption = db.Column(db.Boolean)
+    ebs_creation_data = db.Column(db.DateTime)
+    ebs_dettached_data = db.Column(db.DateTime)
+    ebs_tag = db.Column(JSONB, index=True)
+
+    def __init__(self, ebs_volume_id, ebs_aws_az, instance_id, snapshot_id,
+             ebs_size, ebs_volume_type, ebs_iops, ebs_alarm_status, ebs_status,
+             ebs_volume_status_ok, ebs_volume_encryption,
+             ebs_creation_data, ebs_dettached_data, ebs_tag):
+
+        self.ebs_volume_id = ebs_volume_id
+        self.ebs_aws_az = ebs_aws_az
+        self.instance_id = instance_id
+        self.snapshot_id = snapshot_id
+        self.ebs_size = ebs_size
+        self.ebs_volume_type = ebs_volume_type
+        self.ebs_iops = ebs_iops
+        self.ebs_alarm_status = ebs_alarm_status
+        self.ebs_status = ebs_status
+        self.ebs_volume_status_ok = ebs_volume_status_ok
+        self.ebs_volume_encryption = ebs_volume_encryption
+        self.ebs_creation_data = ebs_creation_data
+        self.ebs_dettached_data = ebs_dettached_data
+        self.ebs_tag = ebs_tag
+
+    def __repr__(self):
+        return '<AWSEBS {} {}>'.format(self.ebs_volume_id, self.ebs_aws_az)
+
+class AWSnapshot(db.Model):
+    __tablename__ = 'aws_snap'
+
+    snapshot_id = db.Column(db.String(30), primary_key=True)
+    ebs_volume_id = db.Column(db.String(30), index=True)
+
+    snap_size = db.Column(db.String(14), nullable=False)
+    snap_status = db.Column(db.String(30))
+    snap_progress = db.Column(db.String(30))
+    snap_encryption = db.Column(db.Boolean)
+
+    snap_description = db.Column(db.String(255))
+
+    snap_started_data = db.Column(db.DateTime)
+    snap_tag = db.Column(JSONB, index=True)
+
+    def __init__(self, snapshot_id, ebs_volume_id, snap_size, snap_status,
+                 snap_progress, snap_encryption, snap_description, snap_started_data, snap_tag):
+
+        self.snapshot_id = snapshot_id
+        self.ebs_volume_id = ebs_volume_id
+        self.snap_size = snap_size
+        self.snap_status = snap_status
+        self.snap_progress = snap_progress
+        self.snap_encryption = snap_encryption
+        self.snap_description = snap_description
+        self.snap_started_data = snap_started_data
+        self.snap_tag = snap_tag
+
+
+    def __repr__(self):
+        return '<AWSnapshot {} {}>'.format(self.snapshot_id, self.snap_size)
+
 class AWSPrices(db.Model):
     __tablename__ = 'aws_prices'
 
@@ -197,10 +272,14 @@ class AWSInstanceWorkLoad(db.Model):
     #workload_criteria_network = db.Column(db.Float)
     workload_criteria_check = db.Column(db.String(255))
     workload_low_utilization = db.Column(db.Boolean, index=True)
+    workload_java_vm_tuning_suspect = db.Column(db.Boolean, index=True)
+    workload_java_vm_criteria_check = db.Column(db.String(255))
+
 
     def __init__(self, workload_date,instance_id, aws_region, instance_type, cpu_percentage, available_memory_percentage, network_in_bytes_aggr,
                  network_ou_bytes_aggr, cloudwatch_aggregation_type, cloudwatch_aggregation_days, cloudwatch_aggregation_period_from,
-                 cloudwatch_aggregation_period_to, cloudwatch_period_seconds, workload_criteria_check, workload_low_utilization):
+                 cloudwatch_aggregation_period_to, cloudwatch_period_seconds, workload_criteria_check, workload_low_utilization,
+                 workload_java_vm_tuning_suspect=False, workload_java_vm_criteria_check=None):
         self.workload_date = workload_date
         self.instance_id = instance_id
         self.aws_region = aws_region
@@ -216,6 +295,10 @@ class AWSInstanceWorkLoad(db.Model):
         self.cloudwatch_period_seconds = cloudwatch_period_seconds
         self.workload_criteria_check = workload_criteria_check
         self.workload_low_utilization = workload_low_utilization
+        self.workload_java_vm_tuning_suspect = workload_java_vm_tuning_suspect
+        self.workload_java_vm_criteria_check = workload_java_vm_criteria_check
+
+
 
 
     def __repr__(self):
