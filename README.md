@@ -179,7 +179,8 @@ This example, execute the command every 4 hours
 ````
 <!-- CONTACT -->
 ## Contact
-BookingGO - Product Service Team 3 (Taxi)
+Carlos Smaniotto
+csmaniottouk@gmail.com
 
 
 <!-- LICENSE -->
