@@ -44,25 +44,25 @@ and also create a comparision between others model of prices.
 
 ### Roadmap
 - API for read data: 
-    http://cta.bookinggo.com/v2/instance_price?m4.xlarge
+    http://cta/v2/instance_price?m4.xlarge
     will return the cheapest region fot that instance
     (this is available on Re:Dash) 
   
     #### Instances Price 
-    http://cta.bookinggo.com/v2/price
+    http://cta/v2/price
     will return the aws prices for all instances that we have in our enviorment.
     (this is available on Re:Dash)
     
     #### Reserved x OnDemand
-    http://cta.bookinggo.com/v2/reserved
+    http://cta/v2/reserved
     will return reserved price 1 year without upfront for all ondemand instance type that we have.
     (this is available on Re:Dash)
     
-    http://cta.bookinggo.com/v2/reserved?env="QADEV"
+    http://cta/v2/reserved?env="QADEV"
     the same but only for QADEV or other environment that you have flagged on config.py
     
     #### Spot Instance x OnDemand
-    http://cta.bookinggo.com/v2/spot
+    http://cta/v2/spot
     will return spot price for all ondemand instances included on AS group that we have.
     (this is available on Re:Dash)
     
@@ -70,11 +70,11 @@ and also create a comparision between others model of prices.
     the same but only for QADEV or other environment that you have flagged on config.py
     
     #### Regions
-    http://cta.bookinggo.com/v2/regions
+    http://cta/v2/regions
     will return regions that we have instances deployed there.
     (this is available on Re:Dash)
     
-    http://cta.bookinggo.com/v2/regions?env="QADEV"
+    http://cta/v2/regions?env="QADEV"
     the same but only for QADEV or other environment that you have flagged on config.py
     
     #### RDS and Aurora. 
