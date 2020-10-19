@@ -66,7 +66,7 @@ and also create a comparision between others model of prices.
     will return spot price for all ondemand instances included on AS group that we have.
     (this is available on Re:Dash)
     
-    http://cta.bookinggo.com/v2/spot?env="QADEV"
+    http://cta/v2/spot?env="QADEV"
     the same but only for QADEV or other environment that you have flagged on config.py
     
     #### Regions
